@@ -34,8 +34,8 @@ public class FetchUserDataReaderConfig implements ItemReader<UserDTO> {
 	private List<UserDTO> users = new ArrayList<UserDTO>();
 	private int userIndex = 0;
 
-	@Value("${chunckSize}")
-	private int chunckSize;
+	@Value("${chunkSize}")
+	private int chunkSize;
 
 	@Value("${pageSize}")
 	private int pageSize;
@@ -77,7 +77,7 @@ public class FetchUserDataReaderConfig implements ItemReader<UserDTO> {
 
 	@BeforeChunk
 	public void beforeChunck(ChunkContext context) {
-		for (int i = 0; i < chunckSize; i += pageSize) {
+		for (int i = 0; i < chunkSize; i += pageSize) {
              users.addAll(fetchUserDataFromAPI()); // carregar a lista da api
 		}
 	}

@@ -4,6 +4,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,13 +23,14 @@ public class FetUserDataAndStoreDBStepConfig {
 	private int chunkSize;
 
 	@Bean
-	public Step fetUserDataAndStoreDBStep(ItemReader<UserDTO> fetchUserDataReader , JobRepository jobRepository) {
-		return new StepBuilder("fetUserDataAndStoreDBStep",jobRepository )
-				.<UserDTO,UserDTO>chunk(chunkSize, transactionManager)
+	public Step fetUserDataAndStoreDBStep(ItemReader<UserDTO> fetchUserDataReader,
+			ItemWriter<UserDTO> insertUserDataDBWriter, JobRepository jobRepository) {
+		return new StepBuilder("fetUserDataAndStoreDBStep", jobRepository)
+				.<UserDTO, UserDTO>chunk(chunkSize, transactionManager)
 				.reader(fetchUserDataReader)
+				.writer(insertUserDataDBWriter)
 				.build();
-				
-				
+
 	}
 
 }
